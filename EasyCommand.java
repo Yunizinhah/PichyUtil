@@ -3,6 +3,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 
@@ -12,6 +13,25 @@ public class EasyCommand implements CommandExecutor {
      * @author: Nonopichy
      * @discord: Nonopichy#1373 / Nono#2009 (@deprecated)
      */
+    
+    /**
+    * Usage, delete this 'MainPlugin' please.
+    */
+
+    class MainPlugin extends JavaPlugin {
+        public void onEnable(){
+            new EasyCommand(this, "commad", false, true, 0, new String[]{"cmd","cmd_"}, new EasyCommandInterface() {
+                @Override
+                public void onCommand(CommandSender commandSender, String s, String[] args) {
+                    commandSender.sendMessage("Command!");
+                }
+                @Override
+                public void onCooldown(Player p, long cooldown) {
+                    p.sendMessage("In cooldown, wait seconds: "+cooldown);
+                }
+            });
+        }
+    }
 
     private Plugin plugin;
     private String commandName = null;
@@ -92,14 +112,14 @@ public class EasyCommand implements CommandExecutor {
                 if(l>0)
                     easyCommandInterface.onCooldown(((Player) commandSender).getPlayer(),l);
             } else { if(!consoleUsage) return false; }
-            easyCommandInterface.onCommand(commandSender,command,s,args);
+            easyCommandInterface.onCommand(commandSender,s,args);
             return true;
         }
         return false;
     }
 
     public interface EasyCommandInterface {
-        void onCommand(CommandSender commandSender, Command command, String s, String[] args);
+        void onCommand(CommandSender commandSender,  String s, String[] args);
         void onCooldown(Player p, long cooldown);
     }
 
